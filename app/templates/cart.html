@@ -1,0 +1,54 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center">YOUR CART</h1>
+
+{% if 'cart' in session and session['cart'] %}
+<table class="table cart-details">
+
+    {% for c in session['cart'].values() %}
+    <tr style="position: relative">
+        <td class="product-info">
+            <img width="100" src="{{ url_for('static', filename=c.image) }}" alt="{{ c.name }}"/>
+            <ul style="text-align: left; list-style-type: none;">
+                <li style="font-size: larger;">{{ c.name }}</li>
+                <li>{{ "{:,.1f}".format(c.price)}} VND</li>
+            </ul>
+        </td>
+        <td style=" position: absolute; top: 50%; right: 2.25rem; transform: translate(0, -50%)">{{ c.quantity }}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <th style="text-align: right; border: none;">
+            <form action="{{ url_for('delete_cart') }}" method="post">
+                <div class="form-group">
+                    <input style="width: max-content; " class="form-control btn btn-danger"
+                           type="submit" name="delete-cart" value="Delete all"/>
+                </div>
+            </form>
+        </th>
+    </tr>
+</table>
+<div class="make-payment">
+    <div class="alert alert-info make-payment-info">
+        <h5><b>Total quantity:</b> {{ cart_status.total_quantity }}</h5>
+        <h5><b>Total price:</b> {{ "{:,.1f}".format(cart_status.total_amt)}} VND</h5>
+    </div>
+    {% if current_user.is_authenticated %}
+    <div>
+        <button onclick="pay()" class="btn btn-primary">PAY NOW</button>
+    </div>
+    {% else %}
+    <a href="{{ url_for('login', next='cart_detail') }}" class="btn btn-primary">Login to pay</a>
+    {% endif %}
+</div>
+{% else %}
+<h5>
+    <i>Cart is empty!!!</i>
+</h5>
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,49 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    text-align: center;
+}
+
+form.client-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
+}
+
+form.client-action input.form-control {
+    width: 500px;
+    margin: auto;
+}
+
+
+td.product-info {
+    display: flex;
+    flex-direction: row;
+    font-weight: 600;
+    align-items: center;
+}
+
+table.cart-details  {
+    margin-top: 2rem !important;
+    margin-bottom: 3rem !important;
+    width: 700px;
+    margin: auto;
+    margin: auto;
+}
+
+div.make-payment {
+    width: 450px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+div.make-payment-info {
+    text-align: left;
+}

@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if products %}
+<ul class="pagination">
+    {% for index in range(1, page_number + 1) %}
+    <li class="page-item {% if 'page' in request.args and request.args.page|int == index%}active{% elif 'page' not in request.args and index == 1  %}active{% endif %}">
+        <a class="page-link" href="{{ url_for('home', category_id=request.args.category_id, page=index)}}">{{ index }}</a></li>
+    {% endfor %}
+</ul>
+<div class="row">
+    {% for p in products %}
+    <div class="col-xs-12 col-md-3" style="padding: 18px;">
+        <img width="50px" style="margin: 10px;" class="card-img-top" src="{{ url_for('static', filename=p.image)}}"
+             alt="Card image">
+        <div class="card-body">
+            <h4 class="card-title">{{p.name}}</h4>
+            <p class="card-text">{{ "{:,.1f}".format(p.price) }} VND</p>
+            <a href="#" class="btn btn-primary">Details</a>
+            <a onclick="takeCartInfo({{p.id}}, '{{ p.image }}', '{{p.name}}', {{p.price}})" href="#" class="btn btn-danger">Order</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<p><i>Khong co san pham nao!!!</i></p>
+{% endif %}
+{% endblock %}

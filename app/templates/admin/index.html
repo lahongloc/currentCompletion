@@ -1,0 +1,79 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+
+{% if current_user.is_authenticated %}
+<h1 style="margin-bottom: 4.5rem;" class="text-center">WELCOME TO ADMINISTRATION PAGE!</h1>
+
+<div class="row">
+    <div class="col-md-5 col-xs-12">
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>Category</th>
+                <th>Product quantity</th>
+            </tr>
+            {% for c in cate_stats %}
+            <tr>
+                {% for h in c %}
+                <td>{{ h }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div style="padding: 1.5rem; box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset; border-radius: 10px" class="col-md-7 col-xs-12">
+        <canvas id="MyCategoryChart">
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+                let labels = [], quantity = []
+                {% for c in cate_stats %}
+                     labels.push('{{ c[1] }}')
+                     quantity.push({{ c[2] }})
+                {% endfor %}
+
+                window.onload = () => {
+                    const ctx = document.getElementById('MyCategoryChart').getContext('2d')
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                          labels: labels,
+                          datasets: [{
+                            label: '# of Votes',
+                            data: quantity,
+                            borderWidth: 1,
+                            backgroundColor: ['rgba(255, 0, 0, 0.5)',
+                                              'rgba(25, 128, 60, 0.5)',
+                                              'rgba(0, 0, 255, 0.5)',
+                                              'rgba(255, 165, 0, 0.5)'],
+                            borderRadius: '7'
+                          }]
+                        },
+                        options: {
+                          scales: {
+                            y: {
+                              beginAtZero: true
+                            }
+                          }
+                        }
+                      });
+                }
+            </script>
+        </canvas>
+    </div>
+</div>
+{% else %}
+<form action="{{ url_for('admin_login') }}" class="client-action" method="post">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input class="form-control" type="text" name="username" id="username" required/>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input class="form-control" type="password" name="password" id="password" required/>
+    </div>
+    <input style="margin-top: 10px;" class="btn btn-primary" type="submit" value="Log in"/>
+</form>
+{% endif %}
+{% endblock %}
